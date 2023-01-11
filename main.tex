@@ -1,5 +1,18 @@
+
+%    +==================================================+
+%    |    Studienarbeit                                 |
+%    +==================================================+
+%    |    Name:   Aaron Zielstorff                      |
+%    |                                                  |
+%    |    Dozent: Abdullah Bassem Peter Al Jamal        |
+%    |                                                  |
+%    |    Abgabe: 11.01.2023                            |
+%    |                                                  |
+%    |    Usage note: TBD                               |
+%    +==================================================+
+
 % Parameter htwLogo oder htwWeiteres erforderlich! (htwLogo -> Laborberichte; htwWeiteres -> Prüfungen)
-\documentclass[htwWeiteres]{HTWself}
+\documentclass[htwLogo]{HTWself}
 
 % Werden nicht gezeigt, wenn leer
 \HTWTitle{Studienarbeit}
@@ -21,13 +34,16 @@
 
 \begin{document}
 
-\HTWCover
-\HTWListsOfx
+\HTWCover % Ausgabe des Covers abhängig von gewählter Option in der Dokumentenklasse
+\HTWListsOfx % Ausgabe eines Inhaltsverzecihnisses
 
-\include{HTWLogo}
+\chapter{Abbildungen aus Aufgabenstellung (b)}
+\DisplayContent % Zeigt das HTW Logo bzw. das Schachbrett abhängig von der gewählten Option in der Dokumentenklasse. Die Abbildung der Kurvenschaar wird bei beiden Optionen ausgegeben
 
-\include{Schachbrett}
+\chapter{Kapitel 2 der Studienarbeit}
+\blindtext[5]
 
-\include{Kurvenschar}
+\chapter{Letztes Kapitel der Studienarbeit}
+\blindtext[5]
 
 \end{document}

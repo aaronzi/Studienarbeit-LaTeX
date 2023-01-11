@@ -45,14 +45,15 @@
 \colorlet{htwWeiteres}{HTWGray100}
 
 % Setzen des Dokumentencovers ja nach ausgewählter Option
-\newif\ifLabCover
-\newif\ifExamCover
+\newif\ifHTWLogo
+\newif\ifHTWWeiteres
+
 \DeclareOption{htwLogo}{
-    \LabCovertrue
+    \HTWLogotrue
     \newcommand{\usageCategoryColour}{\color{htwLogo}}
 }
 \DeclareOption{htwWeiteres}{
-    \ExamCovertrue
+    \HTWWeiterestrue
     \newcommand{\usageCategoryColour}{\color{htwWeiteres}}
 }
 
@@ -154,7 +155,7 @@
     % Prüfen ob Option htwLogo oder htwWeiteres ausgewählt ist
 
     % ------------------Dokumentencover für htwLogo------------------------------
-    \ifLabCover
+    \ifHTWLogo
 
         \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
         
@@ -206,8 +207,12 @@
             % Name Student
             \begin{flushleft}
                 \begin{tabular}{l c l }
-                    \textbf{Name: }&\hspace{1 cm} &\textbf{Matrikelnummer:} \\
-                    \HTW@HTWStudent & & \HTW@HTWNumber
+                    \ifx\HTW@HTWStudent\empty
+                    % pass
+                    \else
+                        \ifx\HTW@HTWStudent\empty \else \textbf{Name: } \fi & \hspace{1 cm} & \ifx\HTW@HTWNumber\empty \else \textbf{Matrikelnummer: } \fi \\
+                        \ifx\HTW@HTWStudent\empty \else \HTW@HTWStudent \fi &               & \ifx\HTW@HTWNumber\empty \else \HTW@HTWNumber \fi
+                    \fi
                 \end{tabular}
             \end{flushleft}
         
@@ -215,12 +220,12 @@
         
             % Daten
             \begin{tabular}{l l}
-                \textbf{Fachbereich:}   & \HTW@HTWFB        \\
-                \textbf{Studiengang:}   & \HTW@HTWCourse    \\
-                \textbf{Fachsemester:}  & \HTW@HTWSemester  \\
-                \textbf{Fach:}          & \HTW@HTWSubtitle  \\
-                \textbf{Dozent:}        & \HTW@HTWReview    \\
-                \textbf{Ort, Datum:}    & \HTW@HTWIssueDate \\ 
+                \ifx\HTW@HTWFB\empty \else \textbf{Fachbereich:}        & \HTW@HTWFB        \\ \fi
+                \ifx\HTW@HTWCourse\empty \else \textbf{Studiengang:}    & \HTW@HTWCourse    \\ \fi
+                \ifx\HTW@HTWSemester\empty \else \textbf{Fachsemester:} & \HTW@HTWSemester  \\ \fi
+                \ifx\HTW@HTWSubtitle\empty \else \textbf{Fach:}         & \HTW@HTWSubtitle  \\ \fi
+                \ifx\HTW@HTWReview\empty \else \textbf{Dozent:}         & \HTW@HTWReview    \\ \fi
+                \textbf{Ort, Datum:}                                    & \HTW@HTWIssueDate \\ 
             \end{tabular}
     	    
         \end{titlepage}
@@ -229,129 +234,133 @@
 
     % ------------------Dokumentencover für htwWeiteres--------------------------
     \else
-
-        \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
-        
-        \begin{titlepage}
-
-            \AddToShipoutPictureBG*{\AtPageLowerLeft{%
-            \usageCategoryColour\rule{\paperwidth}{0.8\paperheight}}}
-
-            % HTW Logo
-            \begin{novspacecenter}
-                \includegraphics[width=80mm]{figures/logo/logoBW}
-            \end{novspacecenter}
-
-            % Titel
-            \ifx\HTW@HTWTitle\empty
-                % pass
-            \else
-                \vskip50mm
-        	{
-                    \Huge
-                    \bfseries
-                    %\scshape
-                    \boldmath            
-                    \HTW@HTWTitle 
-                    \par   	    
-        	}
-            \fi
-     
-            % Subtitel
-            \ifx\HTW@HTWSubtitle\empty
-                % pass
-            \else
-                \vskip5mm
-                {
-                    \Large
-                    \boldmath            
-                    \HTW@HTWSubtitle 
-                    \par   	    
-                }
-            \fi
-
-            % Thema
-            \ifx\HTW@HTWReference\empty
-                % pass
-            \else
-                \vskip8mm
-                {
-                    \LARGE
-                    \boldmath            
-                    \HTW@HTWReference 
-                    \par   	    
-                }
-            \fi
-            
-            \vfill
-            {
-	            \large
-	            \sffamily       	
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				\ifx\HTW@HTWIssueDate\empty
-					% pass
-				\else
-					\textbf{Abgabedatum}\par
-					\HTW@HTWIssueDate
-				\fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \ifx\HTW@HTWStudent\empty
-                    % pass
-                \else
-                    \vskip5mm
-                    \textbf{Studierender}\par
-                    \HTW@HTWStudent
-                \fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	            
-	            \ifx\HTW@HTWNumber\empty
-		          	% pass
-	            \else
-                        \vskip5mm
-		            \textbf{Matrikelnummer}\par
-		            \HTW@HTWNumber
-	            \fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \ifx\HTW@HTWReview\empty
-                    % pass
-                \else
-                    \vskip5mm
-                    \textbf{Gutachter}\par
-                    \HTW@HTWReview
-                \fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \vskip5mm
-                \textbf{Hochschule für Technik und Wirtschaft Berlin}\par
-                Wilhelminenhofstr. 75A, 12459 Berlin, Germany
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \edef\HTWPubPhraseSummary{\HTW@HTWPubPhrase\HTW@HTWPubPhraseAdditional}
-               	\ifx\HTWPubPhraseSummary\empty
-               		% pass
-               	\else
-               		\vskip5mm
-               		\textbf{Publishers Phrase}\par
-               		    \ifx\HTW@HTWPubPhrase\empty
-               		        % pass
-               		    \else
-               		        \HTW@HTWPubPhrase
-               		        \ifx\HTW@HTWPubPhraseAdditional\empty
-               		            % pass
-               		        \else
-               		            \par
-               		        \fi
-               		    \fi
-               		    \ifx\HTW@HTWPubPhraseAdditional\empty
-               		        % pass
-               		    \else
-               		        \HTW@HTWPubPhraseAdditional
-               		    \fi
-               	\fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            }
-         
-        \end{titlepage}
-        
-        \restoregeometry
+        \ifHTWWeiteres
     
+            \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+            
+            \begin{titlepage}
+    
+                \AddToShipoutPictureBG*{\AtPageLowerLeft{%
+                \usageCategoryColour\rule{\paperwidth}{0.8\paperheight}}}
+    
+                % HTW Logo
+                \begin{novspacecenter}
+                    \includegraphics[width=80mm]{figures/logo/logoBW}
+                \end{novspacecenter}
+    
+                % Titel
+                \ifx\HTW@HTWTitle\empty
+                    % pass
+                \else
+                    \vskip50mm
+            	{
+                        \Huge
+                        \bfseries
+                        %\scshape
+                        \boldmath            
+                        \HTW@HTWTitle 
+                        \par   	    
+            	}
+                \fi
+         
+                % Subtitel
+                \ifx\HTW@HTWSubtitle\empty
+                    % pass
+                \else
+                    \vskip5mm
+                    {
+                        \Large
+                        \boldmath            
+                        \HTW@HTWSubtitle 
+                        \par   	    
+                    }
+                \fi
+    
+                % Thema
+                \ifx\HTW@HTWReference\empty
+                    % pass
+                \else
+                    \vskip8mm
+                    {
+                        \LARGE
+                        \boldmath            
+                        \HTW@HTWReference 
+                        \par   	    
+                    }
+                \fi
+                
+                \vfill
+                {
+    	            \large
+    	            \sffamily       	
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    				\ifx\HTW@HTWIssueDate\empty
+    					% pass
+    				\else
+    					\textbf{Abgabedatum}\par
+    					\HTW@HTWIssueDate
+    				\fi
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    \ifx\HTW@HTWStudent\empty
+                        % pass
+                    \else
+                        \vskip5mm
+                        \textbf{Studierender}\par
+                        \HTW@HTWStudent
+                    \fi
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	            
+    	            \ifx\HTW@HTWNumber\empty
+    		          	% pass
+    	            \else
+                            \vskip5mm
+    		            \textbf{Matrikelnummer}\par
+    		            \HTW@HTWNumber
+    	            \fi
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    \ifx\HTW@HTWReview\empty
+                        % pass
+                    \else
+                        \vskip5mm
+                        \textbf{Gutachter}\par
+                        \HTW@HTWReview
+                    \fi
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    \vskip5mm
+                    \textbf{Hochschule für Technik und Wirtschaft Berlin}\par
+                    Wilhelminenhofstr. 75A, 12459 Berlin, Germany
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    \edef\HTWPubPhraseSummary{\HTW@HTWPubPhrase\HTW@HTWPubPhraseAdditional}
+                   	\ifx\HTWPubPhraseSummary\empty
+                   		% pass
+                   	\else
+                   		\vskip5mm
+                   		\textbf{Publishers Phrase}\par
+                   		    \ifx\HTW@HTWPubPhrase\empty
+                   		        % pass
+                   		    \else
+                   		        \HTW@HTWPubPhrase
+                   		        \ifx\HTW@HTWPubPhraseAdditional\empty
+                   		            % pass
+                   		        \else
+                   		            \par
+                   		        \fi
+                   		    \fi
+                   		    \ifx\HTW@HTWPubPhraseAdditional\empty
+                   		        % pass
+                   		    \else
+                   		        \HTW@HTWPubPhraseAdditional
+                   		    \fi
+                   	\fi
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                }
+             
+            \end{titlepage}
+            
+            \restoregeometry
+        
+        \else
+            % pass
+        \fi
     \fi
 }
 
@@ -415,6 +424,101 @@
     \setcounter{tocdepth}{2}
     \tableofcontents
     \addcontentsline{toc}{section}{Inhaltsverzeichnis}
+}
+
+%    +--------------------------------------------------+
+%    |    Abbildungen                                   |
+%    +--------------------------------------------------+
+
+\newcommand{\DisplayContent}{
+    \ifHTWLogo
+        % Anzeigen des HTW Logos
+        \begin{center}
+        \begin{pspicture*}[showgrid=true](13,4)
+            %------------Graue Quadrate des Logos-------------
+            % Koordinaten
+            \pnodes(0,3){P1}   (1,4){P2}
+                   (0,1){P3}   (1,2){P4}
+                   (0,0){P5}   (1,1){P6}
+                   (1,2){P7}   (2,3){P8}
+                   (2,1){P9}   (3,2){P10}
+                   (2,0){P11}  (3,1){P12}
+                   (12,0){P13} (13,1){P14}
+            % Zeichnen in Schleife mittels multido
+            \multido{\iKnotenX=1+2,\iKnotenY=2+2}{7}{
+                \psframe[linecolor=HTWGray100,fillstyle=solid,fillcolor=HTWGray100](P\iKnotenX)(P\iKnotenY)
+            }
+            %------------Grauer Kreisausschnitt---------------
+            \pswedge[linecolor=HTWGray100,fillstyle=solid,fillcolor=HTWGray100](2,2){1}{0}{90}
+            %------------Grüne Quadrate des Logos-------------
+            % Koordinaten
+            \pnodes(4,3){Q1}   (5,4){Q2}
+                   (4,2){Q3}   (5,3){Q4}
+                   (5,2){Q5}   (6,3){Q6}
+                   (4,1){Q7}   (5,2){Q8}
+                   (5,0){Q9}   (6,1){Q10}
+                   (7,2){Q11}  (8,3){Q12}
+                   (7,1){Q13}  (8,2){Q14}
+                   (8,0){Q15}  (9,1){Q16}
+                   (9,0){Q17}  (10,1){Q18}
+                   (9,1){Q19}  (10,2){Q20}
+                   (9,2){Q21}  (10,3){Q22}
+                   (10,0){Q23} (11,1){Q24}
+                   (11,1){Q25} (12,2){Q26}
+                   (11,2){Q27} (12,3){Q28}
+            % Zeichnen in Schleife mittels multido
+            \multido{\iKnotenX=1+2,\iKnotenY=2+2}{14}{
+                \psframe[linecolor=HTWGreen100,fillstyle=solid,fillcolor=HTWGreen100](Q\iKnotenX)(Q\iKnotenY)
+            }
+            %------------Grüne Kreisausschnitte---------------
+            % Koordinaten
+            \pnodes(5,1){M1}(8,1){M2}
+            % Zeichnen in Schleife mittels multido
+            \multido{\iPos=1+1}{2}{
+                \pswedge[linecolor=HTWGreen100,fillstyle=solid,fillcolor=HTWGreen100](M\iPos){1}{180}{270}
+            }
+        \end{pspicture*}
+        \end{center}
+    \else
+        \ifHTWWeiteres
+            % Anzeigen des Schachbrettes
+            \begin{center}
+            \begin{pspicture*}[showgrid=false](8.0,8.0)
+                \multido{\iLowE=1+2, \iHighE=2+2, \iLowO=0+2, \iHighO=1+2, \iFarbeG=25+25, \iFarbeU=12+25}{4}
+                {
+                    % Zeichnen der geraden Reihen 
+                    \multido{\iA=2+2,\iB=1+2}{4}{\psframe[linecolor=Black100,fillstyle=solid,fillcolor=blue!\iFarbeG,linewidth=0pt](\iA,\iLowE)(\iB,\iHighE)} % Schwarze Kästchen
+                    \multido{\iA=0+2,\iB=1+2}{4}{\psframe[linecolor=Black100,fillstyle=solid,fillcolor=White100,linewidth=0pt](\iA,\iLowE)(\iB,\iHighE)} % Weiße Kästchen
+                    % Zeichnen der ungeraden Reihen
+                    \multido{\iA=0+2,\iB=1+2}{4}{\psframe[linecolor=Black100,fillstyle=solid,fillcolor=blue!\iFarbeU,linewidth=0pt](\iA,\iLowO)(\iB,\iHighO)} % Schwarze Kästchen
+                    \multido{\iA=2+2,\iB=1+2}{4}{\psframe[linecolor=Black100,fillstyle=solid,fillcolor=White100,linewidth=0pt](\iA,\iLowO)(\iB,\iHighO)} % Weiße Kästchen
+                }
+            \end{pspicture*}
+            \end{center}
+        \else
+            % pass
+        \fi
+    \fi
+    % Anzeigen der Kurvenschaar
+    \newpage
+    \begin{center}
+    \psset{algebraic, plotpoints=100, yunit=1, linewidth=1pt, subticks=2, ylabelPos=right}
+    \begin{pspicture*}(-5,-5)(5,5)
+        % Plot-Achsen deklarieren
+        \psaxes[
+            tickcolor=HTWGreen100
+        ]{->}(0,0)(-5,-5)(5,5)
+        % Plotten einer Kurvenschar eines Polynoms 5. Grades (4 Funktionen)
+        \multido{\nA=-3+2,\nB=25+25}{4}{
+            \psplot[
+                linecolor=red!\nB,
+                showpoints,
+                dotsize=0.1
+            ]{-5}{5}{%
+                ((\nA*x+4)*(x+1)*(x-1)*(x-3)*(x-5))/100} % gewähltes Polynom
+        }
+    \end{pspicture*}
+    \end{center}
 }
 
 \endinput
