@@ -2,17 +2,17 @@
 %    +==================================================+
 %    |    LaTeX class file                              |
 %    +==================================================+
-%    |    Name:    Template HTW                         |
+%    |    Name:    Template HTWself                     |
 %    |                                                  |
 %    |    Purpose: Study purpose (Internal + external). |
 %    |                                                  |
-%    |    Created: 2020                                 |
+%    |    Created: 2023                                 |
 %    |                                                  |
 %    |    Usage note: TBD                               |
 %    +==================================================+
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{HTW}[2020/04/01 general purpose]
+\ProvidesClass{HTWself}[2023/01/11 general purpose]
 
 %    +--------------------------------------------------+
 %    |    Corporate Identity                            |
@@ -20,13 +20,13 @@
 
 \RequirePackage[RGB]{xcolor}
 
-% corporate design HTW Berlin
-% see https://corporatedesign.htw-berlin.de/schrift-farbe/markenfarben/
+% Corporate Design der HTW Berlin
+% Siehe https://corporatedesign.htw-berlin.de/schrift-farbe/markenfarben/
 \definecolor{HTWGreen100}{RGB}{118 185 0}
 \definecolor{HTWBlue100}{RGB}{0 130 209}
 \definecolor{HTWOrange100}{RGB}{255 95 0}
 \definecolor{HTWGray100}{RGB}{175 175 175}
-% general design
+% Generelles Design
 \definecolor{Blue100}{RGB}{0 56 131}
 \definecolor{Blue090}{RGB}{26 49 127}
 \definecolor{Blue080}{RGB}{51 71 141}
@@ -37,12 +37,19 @@
 \definecolor{Gray100}{RGB}{101 120 125}
 \definecolor{Green100}{RGB}{65 130 126}
 
-% specified
-\colorlet{thesis}{HTWGreen100}
-\colorlet{lab}{Gray100}
+% Definieren der Primärfarben für die auswählbaren Optionen
+\colorlet{htwLogo}{HTWGreen100}
+\colorlet{htwWeiteres}{HTWGray100}
 
-\DeclareOption{lab}{\newcommand{\usageCategoryColour}{\color{lab}}}
-\DeclareOption{thesis}{\newcommand{\usageCategoryColour}{\color{thesis}}}
+% setzen der Primärfarben je nach ausgewählter Option
+\DeclareOption{htwLogo}{\newcommand{\usageCategoryColour}{\color{htwLogo}}}
+\DeclareOption{htwWeiteres}{\newcommand{\usageCategoryColour}{\color{htwWeiteres}}}
+
+% Setzen des Dokumentencovers ja nach ausgewählter Option
+\newif\ifLabCover
+\newif\ifExamCover
+\DeclareOption{htwLogo}{\LabCovertrue}
+\DeclareOption{htwWeiteres}{\ExamCovertrue}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{labbook}}
 \ProcessOptions\relax
@@ -115,7 +122,7 @@
 %    footbotline
     ]{scrlayer-scrpage}
 \pagestyle{scrheadings}
-\clearscrheadfoot
+\clearpairofpagestyles
     \ihead{\HTW@HTWStudent}
     \chead{}
     \ohead{\HTW@HTWTitle}
@@ -128,134 +135,141 @@
 {\parskip=0pt\par\nopagebreak\centering}
 {\par\noindent\ignorespacesafterend}
 
-\newcommand{\HTWCover}{
+%    +--------------------------------------------------+
+%    |    Dokumentencover                               |
+%    +--------------------------------------------------+
 
-    \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
-    
-    \begin{titlepage}
-        \AddToShipoutPictureBG*{\AtPageLowerLeft{%
-        \usageCategoryColour\rule{\paperwidth}{0.8\paperheight}}}
+\newcommand{\HTWCover}{
+    % Prüfen ob Option htwLogo oder htwWeiteres ausgewählt ist
+
+    % ------------------Dokumentencover für htwLogo------------------------------
+    \ifLabCover
+
+        \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
         
-    	    \begin{novspacecenter}
-        	    \includegraphics[width=80mm]{figures/logo/logo}
-    	    \end{novspacecenter}
-    	    \vskip50mm
-    	    {
-            \Huge
-            \bfseries
-            %\scshape
-            \boldmath            
-            \HTW@HTWTitle 
-            \par   	    
-    	    }
-        	\ifx\HTW@HTWSubtitle\empty
-        		% pass
-        	\else
-	        \vskip5mm
-    	        {
-                \Large
-                \boldmath            
-                \HTW@HTWSubtitle 
-                \par   	    
-    	        }
-        	\ifx\HTW@HTWReference\empty
-        		% pass
-        	\else
-	        \vskip8mm
-    	        {
-                \LARGE
-                \boldmath            
-                \HTW@HTWReference 
-                \par   	    
-    	        }
-	        \fi
-        \vfill
-            {
-	            \large
-	            \sffamily
-	            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	            
-	            \ifx\HTW@HTWNumber\empty
-		          	% pass
-	            \else
-		            \textbf{Document number}\par
-		            \HTW@HTWNumber
-	            \fi             	
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				\ifx\HTW@HTWIssueDate\empty
-					% pass
-				\else
-					\vskip5mm
-					\textbf{Date of Issue}\par
-					\HTW@HTWIssueDate
-				\fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-               	\ifx\HTW@HTWStudent\empty
-               		% pass
-               	\else
-               		\vskip5mm
-               		\textbf{Student}\par
-               		\HTW@HTWStudent
-               	\fi
-               	\ifx\HTW@HTWReview\empty
-               		% pass
-               	\else
-               		\vskip5mm
-               		\textbf{Gutachter}\par
-               		\HTW@HTWReview
-               	\fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \vskip5mm
-                \textbf{Hochschule für Technik und Wirtschaft Berlin}\par
-                Wilhelminenhofstr. 75A, 12459 Berlin, Germany
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                \edef\HTWPubPhraseSummary{\HTW@HTWPubPhrase\HTW@HTWPubPhraseAdditional}
-               	\ifx\HTWPubPhraseSummary\empty
-               		% pass
-               	\else
-               		\vskip5mm
-               		\textbf{Publishers Phrase}\par
-               		    \ifx\HTW@HTWPubPhrase\empty
-               		        % pass
-               		    \else
-               		        \HTW@HTWPubPhrase
-               		        \ifx\HTW@HTWPubPhraseAdditional\empty
-               		            % pass
-               		        \else
-               		            \par
-               		        \fi
-               		    \fi
-               		    \ifx\HTW@HTWPubPhraseAdditional\empty
-               		        % pass
-               		    \else
-               		        \HTW@HTWPubPhraseAdditional
-               		    \fi
-               	\fi
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            }
-    \end{titlepage}
+        \begin{titlepage}
+
+            % HTW Logo
+            \begin{flushright}
+                \includegraphics[width=50mm]{figures/logo/logoColor}
+            \end{flushright}
+
+            \vspace{3cm}
+            
+            % Titel
+            \ifx\HTW@HTWTitle\empty
+                % pass
+            \else
+                \begin{center}
+                    \Huge{\textbf{\HTW@HTWTitle}} \\
+                \end{center}
+            \fi
+           
+            \vspace{0.2cm}
+           
+            % Subtitel
+            \ifx\HTW@HTWSubtitle\empty
+                % pass
+            \else
+                \begin{center}
+                    \Large{\HTW@HTWSubtitle} \\
+                \end{center}
+            \fi
+
+            \vspace{0.4cm}
+
+            % Referenz
+            \ifx\HTW@HTWReference\empty
+                % pass
+            \else
+                \begin{center}
+                    \LARGE{\HTW@HTWReference} \\
+                \end{center}
+            \fi
+        
+            \vspace{7cm}
+        
+            % Name Student
+            \begin{flushleft}
+                \begin{tabular}{l c l }
+                    \textbf{Name: }&\hspace{1 cm} &\textbf{Matrikelnummer:} \\
+                    \HTW@HTWStudent & & \HTW@HTWNumber
+                \end{tabular}
+            \end{flushleft}
+        
+            \vspace{1cm}
+        
+            % Daten
+            \begin{tabular}{l l}
+                \textbf{Fachbereich:}   & \HTW@HTWFB        \\
+                \textbf{Studiengang:}   & \HTW@HTWCourse    \\
+                \textbf{Fachsemester:}  & \HTW@HTWSemester  \\
+                \textbf{Fach:}          & \HTW@HTWSubtitle  \\
+                \textbf{Dozent:}        & \HTW@HTWReview    \\
+                \textbf{Ort, Datum:}    & \HTW@HTWIssueDate \\ 
+            \end{tabular}
+    	    
+        \end{titlepage}
+        
+        \restoregeometry
+
+    % ------------------Dokumentencover für htwWeiteres--------------------------
+    \else
+
+        \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+        
+        \begin{titlepage}
+
+            % HTW Logo
+            \begin{novspacecenter}
+                \includegraphics[width=80mm]{figures/logo/logoBW}
+            \end{novspacecenter}
+         
+        \end{titlepage}
+        
+        \restoregeometry
     
-    \restoregeometry
+    \fi
 }
 
+% Dokumententitel
 \newcommand{\HTWTitle}[1]{ \def \HTW@HTWTitle{#1} }
 \HTWTitle{}
 
+% Dokumentenuntertitel
 \newcommand{\HTWSubtitle}[1]{ \def \HTW@HTWSubtitle{#1} }
 \HTWSubtitle{}
 
+% Thema
 \newcommand{\HTWReference}[1]{ \def \HTW@HTWReference{#1} }
 \HTWReference{}
 
+% Matrikelnummer
 \newcommand{\HTWNumber}[1]{ \def \HTW@HTWNumber{#1} }
 \HTWNumber{}
 
+% Fachbereich
+\newcommand{\HTWFB}[1]{ \def \HTW@HTWFB{#1} }
+\HTWFB{}
+
+% Studiengang
+\newcommand{\HTWCourse}[1]{ \def \HTW@HTWCourse{#1} }
+\HTWCourse{}
+
+% Fachsemester
+\newcommand{\HTWSemester}[1]{ \def \HTW@HTWSemester{#1} }
+\HTWSemester{}
+
+% Abgabedatum
 \newcommand{\HTWIssueDate}[1]{ \def \HTW@HTWIssueDate{#1} }
 \HTWIssueDate{}
 \HTWIssueDate{Berlin, \today}
 
+% Name des Studierenden
 \newcommand{\HTWStudent}[1]{ \def \HTW@HTWStudent{#1} }
 \HTWStudent{}
 
+% Name des Prüfers
 \newcommand{\HTWReview}[1]{ \def \HTW@HTWReview{#1} }
 \HTWReview{}
 
