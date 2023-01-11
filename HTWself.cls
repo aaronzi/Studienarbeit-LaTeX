@@ -41,15 +41,17 @@
 \colorlet{htwLogo}{HTWGreen100}
 \colorlet{htwWeiteres}{HTWGray100}
 
-% setzen der Primärfarben je nach ausgewählter Option
-\DeclareOption{htwLogo}{\newcommand{\usageCategoryColour}{\color{htwLogo}}}
-\DeclareOption{htwWeiteres}{\newcommand{\usageCategoryColour}{\color{htwWeiteres}}}
-
 % Setzen des Dokumentencovers ja nach ausgewählter Option
 \newif\ifLabCover
 \newif\ifExamCover
-\DeclareOption{htwLogo}{\LabCovertrue}
-\DeclareOption{htwWeiteres}{\ExamCovertrue}
+\DeclareOption{htwLogo}{
+    \LabCovertrue
+    \newcommand{\usageCategoryColour}{\color{htwLogo}}
+}
+\DeclareOption{htwWeiteres}{
+    \ExamCovertrue
+    \newcommand{\usageCategoryColour}{\color{htwWeiteres}}
+}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{labbook}}
 \ProcessOptions\relax
@@ -149,6 +151,9 @@
         
         \begin{titlepage}
 
+            \AddToShipoutPictureBG*{\AtPageLowerLeft{%
+            \usageCategoryColour\rule{\paperwidth}{0.4\paperheight}}}
+
             % HTW Logo
             \begin{flushright}
                 \includegraphics[width=50mm]{figures/logo/logoColor}
@@ -220,10 +225,115 @@
         
         \begin{titlepage}
 
+            \AddToShipoutPictureBG*{\AtPageLowerLeft{%
+            \usageCategoryColour\rule{\paperwidth}{0.8\paperheight}}}
+
             % HTW Logo
             \begin{novspacecenter}
                 \includegraphics[width=80mm]{figures/logo/logoBW}
             \end{novspacecenter}
+            
+            \vskip50mm
+
+            % Titel
+    	{
+                \Huge
+                \bfseries
+                %\scshape
+                \boldmath            
+                \HTW@HTWTitle 
+                \par   	    
+    	}
+     
+            % Subtitel
+            \ifx\HTW@HTWSubtitle\empty
+                % pass
+            \else
+                \vskip5mm
+                {
+                    \Large
+                    \boldmath            
+                    \HTW@HTWSubtitle 
+                    \par   	    
+                }
+
+            % Thema
+            \ifx\HTW@HTWReference\empty
+                % pass
+            \else
+                \vskip8mm
+                {
+                    \LARGE
+                    \boldmath            
+                    \HTW@HTWReference 
+                    \par   	    
+                }
+            \fi
+            
+            \vfill
+            {
+	            \large
+	            \sffamily       	
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				\ifx\HTW@HTWIssueDate\empty
+					% pass
+				\else
+					\textbf{Abgabedatum}\par
+					\HTW@HTWIssueDate
+				\fi
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                \ifx\HTW@HTWStudent\empty
+                    % pass
+                \else
+                    \vskip5mm
+                    \textbf{Studierender}\par
+                    \HTW@HTWStudent
+                \fi
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	            
+	            \ifx\HTW@HTWNumber\empty
+		          	% pass
+	            \else
+                        \vskip5mm
+		            \textbf{Matrikelnummer}\par
+		            \HTW@HTWNumber
+	            \fi
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                \ifx\HTW@HTWReview\empty
+                    % pass
+                \else
+                    \vskip5mm
+                    \textbf{Gutachter}\par
+                    \HTW@HTWReview
+                \fi
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                \vskip5mm
+                \textbf{Hochschule für Technik und Wirtschaft Berlin}\par
+                Wilhelminenhofstr. 75A, 12459 Berlin, Germany
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                \edef\HTWPubPhraseSummary{\HTW@HTWPubPhrase\HTW@HTWPubPhraseAdditional}
+               	\ifx\HTWPubPhraseSummary\empty
+               		% pass
+               	\else
+               		\vskip5mm
+               		\textbf{Publishers Phrase}\par
+               		    \ifx\HTW@HTWPubPhrase\empty
+               		        % pass
+               		    \else
+               		        \HTW@HTWPubPhrase
+               		        \ifx\HTW@HTWPubPhraseAdditional\empty
+               		            % pass
+               		        \else
+               		            \par
+               		        \fi
+               		    \fi
+               		    \ifx\HTW@HTWPubPhraseAdditional\empty
+               		        % pass
+               		    \else
+               		        \HTW@HTWPubPhraseAdditional
+               		    \fi
+               	\fi
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            }
          
         \end{titlepage}
         
@@ -283,10 +393,15 @@
 % has to be set via Python
 \newcommand{\testreportcomment}{Xxx ...}
 
+%    +--------------------------------------------------+
+%    |    Verzeichnisse                                 |
+%    +--------------------------------------------------+
+
+% ------------------Inhaltsverzeichnis--------------------------
 \newcommand{\HTWListsOfx}{
-    \setcounter{tocdepth}{1}
+    \setcounter{tocdepth}{2}
     \tableofcontents
-    \addcontentsline{toc}{section}{Contents}
+    \addcontentsline{toc}{section}{Inhaltsverzeichnis}
 }
 
 \endinput
