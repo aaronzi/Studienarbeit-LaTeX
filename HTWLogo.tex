@@ -1,0 +1,48 @@
+\chapter{Programmierung des HTW Logos}
+
+\begin{center}
+\begin{pspicture*}[showgrid=true](13,4)
+    %------------Graue Quadrate des Logos-------------
+    % Koordinaten
+    \pnodes(0,3){P1}   (1,4){P2}
+           (0,1){P3}   (1,2){P4}
+           (0,0){P5}   (1,1){P6}
+           (1,2){P7}   (2,3){P8}
+           (2,1){P9}   (3,2){P10}
+           (2,0){P11}  (3,1){P12}
+           (12,0){P13} (13,1){P14}
+    % Zeichnen in Schleife mittels multido
+    \multido{\iKnotenX=1+2,\iKnotenY=2+2}{7}{
+        \psframe[linecolor=HTWGray100,fillstyle=solid,fillcolor=HTWGray100](P\iKnotenX)(P\iKnotenY)
+    }
+    %------------Grauer Kreisausschnitt---------------
+    \pswedge[linecolor=HTWGray100,fillstyle=solid,fillcolor=HTWGray100](2,2){1}{0}{90}
+    %------------Grüne Quadrate des Logos-------------
+    % Koordinaten
+    \pnodes(4,3){Q1}   (5,4){Q2}
+           (4,2){Q3}   (5,3){Q4}
+           (5,2){Q5}   (6,3){Q6}
+           (4,1){Q7}   (5,2){Q8}
+           (5,0){Q9}   (6,1){Q10}
+           (7,2){Q11}  (8,3){Q12}
+           (7,1){Q13}  (8,2){Q14}
+           (8,0){Q15}  (9,1){Q16}
+           (9,0){Q17}  (10,1){Q18}
+           (9,1){Q19}  (10,2){Q20}
+           (9,2){Q21}  (10,3){Q22}
+           (10,0){Q23} (11,1){Q24}
+           (11,1){Q25} (12,2){Q26}
+           (11,2){Q27} (12,3){Q28}
+    % Zeichnen in Schleife mittels multido
+    \multido{\iKnotenX=1+2,\iKnotenY=2+2}{14}{
+        \psframe[linecolor=HTWGreen100,fillstyle=solid,fillcolor=HTWGreen100](Q\iKnotenX)(Q\iKnotenY)
+    }
+    %------------Grüne Kreisausschnitte---------------
+    % Koordinaten
+    \pnodes(5,1){M1}(8,1){M2}
+    % Zeichnen in Schleife mittels multido
+    \multido{\iPos=1+1}{2}{
+        \pswedge[linecolor=HTWGreen100,fillstyle=solid,fillcolor=HTWGreen100](M\iPos){1}{180}{270}
+    }
+\end{pspicture*}
+\end{center}

@@ -36,6 +36,9 @@
 \definecolor{Red100}{RGB}{175 42 66}
 \definecolor{Gray100}{RGB}{101 120 125}
 \definecolor{Green100}{RGB}{65 130 126}
+\definecolor{Black100}{RGB}{0 0 0}
+\definecolor{Grey100}{RGB}{113 113 113}
+\definecolor{White100}{RGB}{255 255 255}
 
 % Definieren der Primärfarben für die auswählbaren Optionen
 \colorlet{htwLogo}{HTWGreen100}
@@ -129,13 +132,19 @@
     \chead{}
     \ohead{\HTW@HTWTitle}
     \ifoot{}
-    \cfoot{Page \thepage}
+    \cfoot{Seite \thepage}
     \ofoot{}
 
 % center without vspaces
 \newenvironment{novspacecenter}
 {\parskip=0pt\par\nopagebreak\centering}
 {\par\noindent\ignorespacesafterend}
+
+% Pakete für die Nutzung von PSTricks
+\usepackage{pstricks} % Erstellung von Grafiken in LaTeX
+\usepackage{pst-plot} % Koordinatensysteme 2D
+\usepackage{pst-node} % Knoten (Nodes) 2D
+\usepackage{multido}
 
 %    +--------------------------------------------------+
 %    |    Dokumentencover                               |
@@ -232,18 +241,21 @@
             \begin{novspacecenter}
                 \includegraphics[width=80mm]{figures/logo/logoBW}
             \end{novspacecenter}
-            
-            \vskip50mm
 
             % Titel
-    	{
-                \Huge
-                \bfseries
-                %\scshape
-                \boldmath            
-                \HTW@HTWTitle 
-                \par   	    
-    	}
+            \ifx\HTW@HTWTitle\empty
+                % pass
+            \else
+                \vskip50mm
+        	{
+                    \Huge
+                    \bfseries
+                    %\scshape
+                    \boldmath            
+                    \HTW@HTWTitle 
+                    \par   	    
+        	}
+            \fi
      
             % Subtitel
             \ifx\HTW@HTWSubtitle\empty
@@ -256,6 +268,7 @@
                     \HTW@HTWSubtitle 
                     \par   	    
                 }
+            \fi
 
             % Thema
             \ifx\HTW@HTWReference\empty
